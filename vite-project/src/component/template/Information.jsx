@@ -23,7 +23,7 @@ const Information = () => {
           </div>
 
           {/* Links Section */}
-          <div className="grid grid-cols-4 gap-8 mt-8 text-gray-700">
+          <div className="grid grid-cols-4 gap-8 mt-8 w-[80vw] h-[20vh] p-4 bg-[#bcb293] text-gray-700">
               {/* Product */}
               <div>
                   <h3 className="font-bold">Product</h3>
