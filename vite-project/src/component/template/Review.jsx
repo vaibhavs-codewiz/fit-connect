@@ -1,6 +1,9 @@
 import { Button, Card, Flex, Typography } from 'antd';
 const cardStyle = {
     width: 620,
+    backgroundColor: "#1c1c1c", 
+    color: "white",
+    overflow: "hidden" 
 };
 const imgStyle = {
     display: 'block',
@@ -12,7 +15,7 @@ const Review = () => {
   return (
     <div >
           <Card
-              hoverable
+              
               style={cardStyle}
               styles={{
                   body: {

@@ -17,7 +17,7 @@ const RegisterModal = () => {
     return (
         <>
             <Button type="primary" size="large"
-                style={{ backgroundColor: "#bcb293" }}
+                style={{ backgroundColor: "#d6fd51", color: "black" }}
                 onClick={() => setIsModalOpen(true)}
             >
                 Register
