@@ -1,177 +1,43 @@
-import React, { useState } from 'react';
-import {
-    AutoComplete,
-    Button,
-    Cascader,
-    Checkbox,
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    Row,
-    Select,
-} from 'antd';
+import { useState } from "react";
+// import axios from "axios";
+import {  useNavigate } from "react-router-dom";
 
-const { Option } = Select;
+const RegisterPage = () => {
+  const [user, setUser] = useState({ name: "", email: "", password: "", phone: "" });
+  const navigate = useNavigate();
 
-const preferredGymTypes = ["Yoga", "Strength Training", "Cardio"];
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-const formItemLayout = {
-    labelCol: { xs: { span: 24 }, sm: { span: 8 } },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 16 } },
+  const handleSubmit = async (role, e) => {
+    console.log(role)
+    e.preventDefault();
+    console.log("Sending request to backend with:", user);
+    try {
+      // const response = await axios.post("http://localhost:8083/api/users/register", user);
+      //console.log("Full Response:", response); // 👀 Debug here
+      navigate(`/${role}/login`);
+    } catch (error) {
+      console.error("Axios Error:", error);
+      console.error("Full Error Response:", error.response);
+      alert("Registration failed: " + (error.response?.data || "No response from server"));
+    }
+  };
+
+  return (
+    <div>
+      <h2>Register</h2>
+      <form className="bg-amber-200" onSubmit={(e) => (handleSubmit("users", e))}>
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+        <input type="text" name="phone" placeholder="Phone" onChange={handleChange} />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
 };
 
-const tailFormItemLayout = {
-    wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 16, offset: 8 } },
-};
+export default RegisterPage;
 
-const UserRegisterPage = () => {
-    const [form] = Form.useForm();
-
-    const onFinish = (values) => {
-        console.log('Form Submitted:', values);
-    };
-
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <Form
-                {...formItemLayout}
-                form={form}
-                name="user_register"
-                onFinish={onFinish}
-                style={{ maxWidth: 600, background: "#f9f9f9", padding: "20px", borderRadius: "10px" }}
-                scrollToFirstError
-            >
-                {/* Full Name */}
-                <Form.Item
-                    name="fullName"
-                    label="Full Name"
-                    rules={[{ required: true, message: 'Please enter your full name!' }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                {/* Address */}
-                <Form.Item
-                    name="address"
-                    label="Address"
-                    rules={[{ required: true, message: 'Please enter your address!' }]}
-                >
-                    <Input.TextArea rows={2} />
-                </Form.Item>
-
-                {/* Gender */}
-                <Form.Item
-                    name="gender"
-                    label="Gender"
-                    rules={[{ required: true, message: 'Please select your gender!' }]}
-                >
-                    <Select placeholder="Select gender">
-                        <Option value="male">Male</Option>
-                        <Option value="female">Female</Option>
-                        <Option value="other">Other</Option>
-                    </Select>
-                </Form.Item>
-
-                {/* Email */}
-                <Form.Item
-                    name="email"
-                    label="E-mail"
-                    rules={[
-                        { type: 'email', message: 'Invalid E-mail!' },
-                        { required: true, message: 'Please enter your E-mail!' },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                {/* Password */}
-                <Form.Item
-                    name="password"
-                    label="Password"
-                    rules={[{ required: true, message: 'Please enter your password!' }]}
-                    hasFeedback
-                >
-                    <Input.Password />
-                </Form.Item>
-
-                {/* Confirm Password */}
-                <Form.Item
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    dependencies={['password']}
-                    hasFeedback
-                    rules={[
-                        { required: true, message: 'Please confirm your password!' },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                return value && getFieldValue('password') === value
-                                    ? Promise.resolve()
-                                    : Promise.reject(new Error('Passwords do not match!'));
-                            },
-                        }),
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
-
-                {/* Height */}
-                <Form.Item
-                    name="height"
-                    label="Height (cm)"
-                    rules={[{ required: true, message: 'Please enter your height!' }]}
-                >
-                    <InputNumber style={{ width: "100%" }} min={50} max={250} />
-                </Form.Item>
-
-                {/* Weight */}
-                <Form.Item
-                    name="weight"
-                    label="Weight (kg)"
-                    rules={[{ required: true, message: 'Please enter your weight!' }]}
-                >
-                    <InputNumber style={{ width: "100%" }} min={20} max={300} />
-                </Form.Item>
-
-                {/* Preferred Gym Type */}
-                <Form.Item
-                    name="preferredGymType"
-                    label="Preferred Gym Type"
-                    rules={[{ required: true, message: 'Please select at least one option!' }]}
-                >
-                    <Checkbox.Group>
-                        <Row>
-                            {preferredGymTypes.map((type) => (
-                                <Col span={8} key={type}>
-                                    <Checkbox value={type}>{type}</Checkbox>
-                                </Col>
-                            ))}
-                        </Row>
-                    </Checkbox.Group>
-                </Form.Item>
-
-                {/* Terms & Agreement */}
-                <Form.Item
-                    name="agreement"
-                    valuePropName="checked"
-                    rules={[
-                        {
-                            validator: (_, value) =>
-                                value ? Promise.resolve() : Promise.reject(new Error('You must accept the agreement')),
-                        },
-                    ]}
-                    {...tailFormItemLayout}
-                >
-                    <Checkbox>I agree to the <a href="#">terms and conditions</a></Checkbox>
-                </Form.Item>
-
-                {/* Submit Button */}
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">Register</Button>
-                </Form.Item>
-            </Form>
-        </div>
-    );
-};
-
-export default UserRegisterPage;

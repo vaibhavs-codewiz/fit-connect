@@ -9,9 +9,12 @@ const RegisterModal = () => {
     const navigate = useNavigate();
 
     const handleSelection = (selectedRole) => {
-        setRole(selectedRole); 
-        setIsModalOpen(false); 
-        navigate("/register"); 
+
+        console.log(selectedRole);
+        setRole(selectedRole);
+        setIsModalOpen(false);
+        navigate(`/${selectedRole}/register`);
+
     };
 
     return (
@@ -32,7 +35,8 @@ const RegisterModal = () => {
                 <div className="flex flex-col space-y-4">
                     <button
                         className="bg-[#bcb293] text-white px-4 py-2 rounded-lg"
-                        onClick={() => handleSelection("User")}
+                        
+                        onClick={() => handleSelection("Users")}
                     >
                         Register as User
                     </button>
