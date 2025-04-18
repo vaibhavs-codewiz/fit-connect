@@ -40,9 +40,9 @@ const GymComponent = () => {
                     {/* Gym Image */}
                     <div className="mx-auto w-32 h-32 rounded overflow-hidden border-4 border-black my-4">
                         <img
-                            src="" // replace with a gym-themed static image
+                            src="https://media.istockphoto.com/id/2170450588/photo/interior-of-modern-light-gym-is-well-equipped-with-modern-machines-and-fitness-gear-offering.jpg?s=1024x1024&w=is&k=20&c=SVm6faIII4bVB49sEq92dsHgN4pnI27g_rsD0HG506o=" // replace with a gym-themed static image
                             alt="Gym Owner"
-                            className="object-cover w-full h-full"
+                            className="object-cover w-full h-full rounded-md"
                         />
                     </div>
 
