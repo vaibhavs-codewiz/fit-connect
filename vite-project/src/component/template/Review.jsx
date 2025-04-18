@@ -1,4 +1,5 @@
 import { Button, Card, Flex, Typography } from 'antd';
+import "../../index.css";
 const cardStyle = {
     width: 620,
     backgroundColor: "#1c1c1c", 
@@ -13,7 +14,7 @@ const imgStyle = {
 const Review = () => {
     
   return (
-    <div >
+      <div style={{ color: 'var(--text-color)' }} >
           <Card
               
               style={cardStyle}
@@ -21,7 +22,8 @@ const Review = () => {
                   body: {
                       padding: 0,
                       overflow: 'hidden',
-                  },
+                      color: 'var(--text-color)'
+                    },
               }}
           >
               <Flex justify="space-between">
@@ -41,7 +43,7 @@ const Review = () => {
                       <Typography.Title level={3}>
                           “Fit connect transform my fitness journey.”
                       </Typography.Title>
-                      <Button type="primary" href="" target="_blank">
+                      <Button type="primary" className='theme-button' href="" target="_blank">
                           Get Started
                       </Button>
                   </Flex>

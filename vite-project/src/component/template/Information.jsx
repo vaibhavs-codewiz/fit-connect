@@ -1,6 +1,6 @@
 const Information = () => {
   return (
-      <div className="w-screen bg-[#1c1c1c] text-gray-300 py-10">
+      <div className="w-screen bg-[var(--background-color)] text-gray-300 py-10">
           <div className="grid grid-cols-4 gap-8 w-[80vw] mx-auto p-4">
               {/* Product */}
               <div>

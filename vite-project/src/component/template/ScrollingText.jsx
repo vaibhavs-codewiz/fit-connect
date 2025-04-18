@@ -1,7 +1,7 @@
 const ScrollingText = () => {
     return (
         <div
-            className="w-full bg-[#d6fd51] py-2 overflow-hidden whitespace-nowrap"
+            className="w-full bg-[var(--secondary-color)] py-2 overflow-hidden whitespace-nowrap"
             style={{
                 display: "flex",
                 gap: "50px", // Ensures spacing between repeated text

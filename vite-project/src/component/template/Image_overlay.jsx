@@ -22,7 +22,7 @@ const Image_overlay = () => {
                       placeholder="Your email here..."
                       className="px-4 py-3 w-full outline-none bg-transparent border border-gray-400 text-white placeholder-gray-300 rounded-md"
                   />
-                  <button className="bg-[#d6fd51] text-black font-semibold px-6 py-3 rounded-md hover:bg-[#c4e64b] transition">
+                  <button className="bg-[var(--secondary-color)] text-black font-semibold px-6 py-3 rounded-md hover:bg-[#c4e64b] transition">
                       Submit
                   </button>
               </div>

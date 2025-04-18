@@ -1,32 +1,33 @@
-import Navbar from "./template/Navbar"
-import MainContainer from "./template/MainContainer"
 import Information from "./template/Information"
-import Review from "./template/Review"
-import ScrollingText from "./template/ScrollingText"
 import Image_overlay from "./template/Image_overlay"
+import { HeroSection } from "./HeroSection"
+import CardHoverEffectDemo from "./CardHoverEffectDemo"
+import GymComponent from "./GymComponent"
 const Home = () => {
   return (
-    <div className="h-[240vh] w-screen bg-cover bg-center bg-no-repeat object-center"
+    <div className="h-[280vh] w-screen bg-cover bg-center bg-no-repeat object-center"
       style={{ backgroundImage: "url('../../public/gymbg2.jpg')" }}
     >
-      <Navbar />
-      {/* Main container */}
-      <div className="h-[80vh] w-[80vw] mx-auto flex flex-col mt-[16vh]">
-        <MainContainer />
+
+      <HeroSection />
+        {/* gyms you can have */}
+      <div className="h-auto bg-[var(--primary-color)]  text-center text-[var(--text-color)] text-6xl text-bold flex flex-col justify-center items-center gap-[100px]"> 
+      <h1 className=" flex flex-col justify-center items-center mt-8 -mb-12">Explore Gyms at MEFIT !</h1>
+          <GymComponent />
       </div>
 
-      {/* scrolling text */}
-      <ScrollingText />
-
       {/* review section */}
-      <div className="h-[100vh] bg-[#1c1c1c] text-center text-[#FAF9F6] text-6xl text-bold flex flex-col justify-center items-center gap-[100px]">
+      <div className="h-[135vh] bg-[var(--background-color)] text-center text-[var(--text-color)] text-6xl text-bold flex flex-col justify-center items-center gap-[100px]">
         <h1>Hear from our awesome users!</h1>
-        <Review />
+
+        {/* <Review /> */}
+        <CardHoverEffectDemo />
       </div>
       {/* image */}
       <Image_overlay />
       {/* information section */}
       <Information />
+
     </div>
   )
 }
