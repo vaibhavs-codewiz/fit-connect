@@ -6,6 +6,7 @@ const GymRegisterPage = () => {
     const { register, handleSubmit, reset } = useForm();
 
     const onSubmit = async (formData) => {
+        console.log(formData)
         try {
             const response = await api.post('/Gym/save', formData);
             console.log('Gym registered successfully:', response.data);
@@ -20,6 +21,9 @@ const GymRegisterPage = () => {
     const navigate = useNavigate();
     const handleNavigate = () => {
         navigate('/');
+    }
+    const handleNavigateLogin = () => {
+        navigate('/GymOwner/login');
     }
 
     return (
@@ -41,7 +45,7 @@ const GymRegisterPage = () => {
                     />
                     <h2 className="mt-4 text-3xl font-bold text-[#C8AD7F]">Register Your Gym</h2>
                 </div>
-                
+
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -86,6 +90,12 @@ const GymRegisterPage = () => {
                             <label className="block text-sm mb-1">Daily Fee</label>
                             <input type="number" {...register("dailyFee", { required: true })} placeholder="e.g., 100" className="w-full rounded-md border p-2 bg-[#000000] text-[#FAF9F6] border-[#C8AD7F] focus:outline-none focus:ring-2 focus:ring-[#C8AD7F]" />
                         </div>
+
+                        {/* password */}
+                        <div>
+                            <label className="block text-sm mb-1">password</label>
+                            <input type="password" {...register("password", { required: true })} placeholder="***" className="w-full rounded-md border p-2 bg-[#000000] text-[#FAF9F6] border-[#C8AD7F] focus:outline-none focus:ring-2 focus:ring-[#C8AD7F]" />
+                        </div>
                     </div>
 
                     <div className="mt-8">
@@ -93,6 +103,10 @@ const GymRegisterPage = () => {
                             Register Gym
                         </button>
                     </div>
+                    <p className="mt-6 text-center text-sm text-[#FAF9F6]">
+                        Already have an account?{' '}
+                        <a href="#" className="text-[#C8AD7F] font-semibold hover:underline" onClick={() => handleNavigateLogin()}>Sign in</a>
+                    </p>
                 </form>
             </div>
         </div>

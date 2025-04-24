@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import api from "../config/api"; // adjust path if needed
-
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const { register, handleSubmit } = useForm();
@@ -14,11 +13,11 @@ const Login = () => {
             const response = await api.post("/user/login", data); // using your custom Axios instance
             console.log("Login response:", response.data);
             if (response.data.responseCode === "00000") {
-                alert("Login Successful!");
-                localStorage.setItem("user", JSON.stringify(response.data.userDto));
+                toast.success("you logged in successfully! 🎉");
+                localStorage.setItem("user", JSON.stringify(response.data.userEmail));
                 navigate("/users/UserDashboard");
             } else {
-                alert("Login Failed: " + response.data.responseMessage);
+                toast.error("Failed to login. Try with correct credentials.❌");
             }
         } catch (error) {
             console.error("Login error:", error.message);
@@ -35,7 +34,7 @@ const Login = () => {
                         alt="Logo"
                         className="mx-auto h-10 w-10"
                     />
-                    <h2 className="mt-6 text-2xl font-bold">Sign in to your account</h2>
+                    <h2 className="mt-6 text-2xl font-bold">Sign in to your user account</h2>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -74,8 +73,8 @@ const Login = () => {
 
                 <p className="mt-6 text-center text-sm">
                     Not a member?{" "}
-                    <a href="#" className="text-[#C8AD7F] hover:underline">
-                        Start your journey
+                    <a onClick={navigate(-1)} href="#" className="text-[#C8AD7F] hover:underline">
+                        Register
                     </a>
                 </p>
             </div>

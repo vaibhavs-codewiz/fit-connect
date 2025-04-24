@@ -4,10 +4,10 @@ import { InteractiveGrid } from "./ui/InteractiveGrid";
 import { ShineBorder } from "./ui/ShineBorder";
 import { Play } from "lucide-react";
 
-export function HeroSection() {
+export function HeroSection({ scrollTargets }) {
     return (
         <section className="relative min-h-screen pt-32 pb-16 overflow-hidden bg-black">
-            <Header />
+            <Header scrollTargets={scrollTargets} />
             <InteractiveGrid containerClassName="absolute inset-0" className="opacity-30" points={40} />
 
             <ShineBorder

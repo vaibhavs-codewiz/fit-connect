@@ -8,7 +8,8 @@ const RegisterPage = () => {
 
   const onSubmit = async (formData) => {
     try {
-      const response = await api.post('/user/save', formData);
+      console.log("Submitting form data:", formData);
+      const response = await api.post('/user/save', formData);//checked
       console.log('User registered successfully:', response.data);
       alert('Registration Successful!');
       reset();
