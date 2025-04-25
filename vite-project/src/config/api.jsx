@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:9999', // Spring Boot backend URL
+    baseURL: 'https://mefit-jbad.onrender.com', // Spring Boot backend URL
     headers: {
         'Content-Type': 'application/json',
     },
