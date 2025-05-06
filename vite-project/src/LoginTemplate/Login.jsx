@@ -10,7 +10,7 @@ const Login = () => {
     const onSubmit = async (data) => {
         console.log("Attempting login with:", data);
         try {
-            const response = await api.get("/user/login", data); // using your custom Axios instance
+            const response = await api.post("/user/login", data); // using your custom Axios instance
             console.log("Login response:", response.data);
             if (response.data.responseCode === "00000") {
                 toast.success("you logged in successfully! 🎉");
