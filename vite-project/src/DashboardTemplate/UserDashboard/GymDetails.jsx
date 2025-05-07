@@ -2,19 +2,22 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../config/api';
 import { toast } from 'react-toastify';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from "react-multi-date-picker";
 
 const GymDetails = () => {
     const { gymId } = useParams();
     const navigate = useNavigate();
     const [gym, setGym] = useState(null);
     const [showForm, setShowForm] = useState(false);
+
     const [subscription, setSubscription] = useState({
         userEmail: '',
         gymId: gymId,
-        startDate: '',
-        endDate: '',
+        dates: [],
         subscriptionType: '',
     });
+
     const [responseMsg, setResponseMsg] = useState('');
 
     useEffect(() => {
@@ -26,34 +29,50 @@ const GymDetails = () => {
                 console.error("Failed to fetch gym details:", error.message);
             }
         };
-
         fetchGym();
     }, [gymId]);
 
     const handleInputChange = (e) => {
-        setSubscription({ ...subscription, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setSubscription({ ...subscription, [name]: value });
     };
+
+    const handleDateChange = (selectedDates) => {
+        setSubscription({ ...subscription, dates: selectedDates });
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(subscription);
         try {
-            const res = await api.post('/user/gym/subscribe', subscription);
+            const payload = {
+                ...subscription,
+                dates: subscription.dates.map(timestamp =>
+                    new Date(timestamp).toISOString().split('T')[0]
+                ),
+            };
+
+            const res = await api.post('/user/gym/subscribe', payload);
             setResponseMsg(res.data.message || 'Subscription successful!');
-            toast.info("payment handling is in progress. 👨‍💻")
-            toast.success("subscribed successfully ");
+            toast.info("Payment handling is in progress. 👨💻");
+            toast.success("Subscribed successfully");
         } catch (error) {
             setResponseMsg(error.response?.data?.message || 'Subscription failed.');
-            toast.error("subscription failed ");
+            toast.error("Subscription failed");
         }
     };
+
+
+
     if (!gym) return <div className="bg-zinc-800 min-h-screen text-white p-10">Loading...</div>;
 
     return (
         <div className="bg-black min-h-screen min-w-screen text-[#FAF9F6] font-sans">
-            {/* Banner Image with overlay */}
+            {/* Banner Section */}
             <div className="relative h-[380px] w-full">
                 <img
-                    src="https://images.unsplash.com/photo-1723117417879-2effcca63cda?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src="https://images.unsplash.com/photo-1723117417879-2effcca63cda?q=80&w=2070&auto=format&fit=crop"
                     alt="Gym Banner"
                     className="w-full h-full object-cover brightness-75"
                 />
@@ -71,7 +90,7 @@ const GymDetails = () => {
                 <div className="absolute top-9 right-11 text-center">
                     <button
                         onClick={() => navigate(-1)}
-                        className="px-4 py-1.5 bg-[#C8AD7F] text-black text-sm font-bold rounded  hover:bg-[#e0c290] transition"
+                        className="px-4 py-1.5 bg-[#C8AD7F] text-black text-sm font-bold rounded hover:bg-[#e0c290] transition"
                     >
                         ← Back to Explore
                     </button>
@@ -79,53 +98,48 @@ const GymDetails = () => {
             </div>
 
             <div className="p-8 space-y-10 max-w-4xl mx-auto">
-                {/* gym information */}
+                {/* Gym Info */}
                 <h2 className="text-xl font-bold mb-6 text-[#C8AD7F]">Gym Information:</h2>
-                <div className="bg-zinc-800 rounded-xl p-6 text-sm text-[#FAF9F6] shadow-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-10">
-                        <p><span className="font-semibold text-white">Gym Name:</span> {gym.gymName}</p>
-                        <p><span className="font-semibold text-white">Address:</span> {gym.address}</p>
-                        <p><span className="font-semibold text-white">Owner:</span> {gym.ownerName}</p>
-                        <p><span className="font-semibold text-white">Contact No:</span> {gym.contactNo}</p>
-                        <p><span className="font-semibold text-white">Email:</span> {gym.email}</p>
-                        <p><span className="font-semibold text-white">Monthly Fee:</span> ₹{gym.monthlyFee}</p>
-                        <p><span className="font-semibold text-white">Daily Fee:</span> ₹{gym.dailyFee}</p>
-                    </div>
+                <div className="bg-zinc-800 rounded-xl p-6 text-sm shadow-lg grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-10">
+                    <p><strong className="text-white">Gym Name:</strong> {gym.gymName}</p>
+                    <p><strong className="text-white">Address:</strong> {gym.address}</p>
+                    <p><strong className="text-white">Owner:</strong> {gym.ownerName}</p>
+                    <p><strong className="text-white">Contact No:</strong> {gym.contactNo}</p>
+                    <p><strong className="text-white">Email:</strong> {gym.email}</p>
+                    <p><strong className="text-white">Monthly Fee:</strong> ₹{gym.monthlyFee}</p>
+                    <p><strong className="text-white">Daily Fee:</strong> ₹{gym.dailyFee}</p>
                 </div>
 
                 {/* Facilities */}
                 <div>
                     <h2 className="text-xl font-bold mb-4 text-[#C8AD7F]">Our Facilities:</h2>
                     <div className="flex flex-wrap gap-4">
-                        <span className="border px-4 py-2 rounded-full">Cutting-edge Equipments</span>
-                        <span className="border px-4 py-2 rounded-full">Spacious Fitness Studio</span>
-                        <span className="border px-4 py-2 rounded-full">Cardio & Strength Classes</span>
-                        <span className="border px-4 py-2 rounded-full">Personal Trainer</span>
+                        {['Cutting-edge Equipments', 'Spacious Fitness Studio', 'Cardio & Strength Classes', 'Personal Trainer'].map((facility, index) => (
+                            <span key={index} className="border px-4 py-2 rounded-full">{facility}</span>
+                        ))}
                     </div>
                 </div>
 
-                {/* Available Classes */}
+                {/* Classes */}
                 <div>
                     <h2 className="text-xl font-bold mb-4 text-[#C8AD7F]">Available Classes:</h2>
                     <div className="flex flex-wrap gap-4">
-                        <span className="border px-4 py-2 rounded-full">Cycling Adventures</span>
-                        <span className="border px-4 py-2 rounded-full">HIIT</span>
-                        <span className="border px-4 py-2 rounded-full">Zumba Fitness Parties</span>
-                        <span className="border px-4 py-2 rounded-full">Yoga & Pilates Fusion</span>
+                        {['Cycling Adventures', 'HIIT', 'Zumba Fitness Parties', 'Yoga & Pilates Fusion'].map((cls, index) => (
+                            <span key={index} className="border px-4 py-2 rounded-full">{cls}</span>
+                        ))}
                     </div>
                 </div>
 
-                {/* Membership Box */}
+                {/* Membership CTA */}
                 <div className="bg-[#FF6A3D] text-black p-6 rounded-xl shadow-md text-center cursor-pointer"
                     onClick={() => setShowForm(prev => !prev)}>
-                    <h3 className="font-bold text-lg">ClICK 👆 TO JOIN OUR MEMBERSHIP NOW AND GET 15% OFF</h3>
-                    <p className="text-sm mt-2">Available from 1-10 January 2027</p>
+                    <h3 className="font-bold text-lg">CLICK 👆 TO JOIN OUR MEMBERSHIP NOW AND GET 15% OFF</h3>
+                    <p className="text-sm mt-2">Available from 1–10 January 2027</p>
                 </div>
+
+                {/* Subscription Form */}
                 {showForm && (
-                    <form
-                        onSubmit={handleSubmit}
-                        className="bg-zinc-800 p-6 rounded-xl shadow-md text-sm space-y-4"
-                    >
+                    <form onSubmit={handleSubmit} className="bg-zinc-800 p-6 rounded-xl shadow-md text-sm space-y-4">
                         <h2 className="text-lg font-bold text-[#C8AD7F] mb-4">Subscribe to {gym.gymName}</h2>
 
                         <input
@@ -138,23 +152,15 @@ const GymDetails = () => {
                             className="w-full p-2 rounded bg-zinc-700 text-white"
                         />
 
-                        <input
-                            type="date"
-                            name="startDate"
-                            value={subscription.startDate}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full p-2 rounded bg-zinc-700 text-white"
+                        <label className="block mb-1 text-white">Select Dates</label>
+                        <DatePicker
+                            multiple
+                            value={subscription.dates}
+                            onChange={(dates) => setSubscription({ ...subscription, dates })}
+                            format="YYYY-MM-DD"
+                            className="bg-zinc-700 text-white p-2 rounded w-full"
                         />
 
-                        <input
-                            type="date"
-                            name="endDate"
-                            value={subscription.endDate}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full p-2 rounded bg-zinc-700 text-white"
-                        />
 
                         <select
                             name="subscriptionType"
@@ -183,77 +189,28 @@ const GymDetails = () => {
                     </form>
                 )}
 
-                {/* review portion */}
+                {/* Reviews */}
                 <div className="mt-12">
                     <h2 className="text-xl font-bold mb-6 text-[#C8AD7F]">What Members Say:</h2>
-
                     <div className="grid gap-6 md:grid-cols-2">
-                        {/* Review 1 */}
-                        <div className="bg-zinc-800 text-[#FAF9F6] p-6 rounded-xl shadow-md text-center">
-                            <img
-                                src="https://images.unsplash.com/photo-1729343120898-150933add237?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fHVzZXIlMjBwcm9maWxlJTIwZ2lybCUyMGFzaWFuJTIwc291dGh8ZW58MHx8MHx8fDA%3D"
-                                alt="User 1"
-                                className="h-16 w-20 mx-auto rounded-full mb-4 object-cover"
-                            />
-                            <p className="text-sm">
-                                “Amazing equipment and vibe! The trainers are really motivating. Ive never felt better.”
-                            </p>
-                        </div>
-
-                        {/* Review 2 */}
-                        <div className="bg-zinc-800 text-[#FAF9F6] p-6 rounded-xl shadow-md text-center">
-                            <img
-                                src="https://images.unsplash.com/photo-1590650618955-d682df736c40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="User 2"
-                                className="h-16 w-20 mx-auto rounded-full mb-4 object-cover"
-                            />
-                            <p className="text-sm">
-                                “Love the Zumba classes! It’s the perfect mix of fun and sweat.”
-                            </p>
-                        </div>
-
-                        {/* Review 3 */}
-                        <div className="bg-zinc-800 text-[#FAF9F6] p-6 rounded-xl shadow-md text-center">
-                            <img
-                                src="https://images.unsplash.com/photo-1676083192960-2a4873858487?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="User 3"
-                                className="h-16 w-20 mx-auto rounded-full mb-4 object-cover"
-                            />
-                            <p className="text-sm">
-                                “Facilities are top-notch and super clean. Definitely recommend Iron Paradise!”
-                            </p>
-                        </div>
-
-                        {/* Review 4 */}
-                        <div className="bg-zinc-800 text-[#FAF9F6] p-6 rounded-xl shadow-md text-center">
-                            <img
-                                src="https://plus.unsplash.com/premium_photo-1669882305273-674eff6567af?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="User 4"
-                                className="h-16 w-20 mx-auto rounded-full mb-4 object-cover"
-                            />
-                            <p className="text-sm">
-                                “Great community and support. I’ve already hit my fitness goals in 2 months!”
-                            </p>
-                        </div>
+                        {[1, 2, 3, 4].map((num, index) => (
+                            <div key={index} className="bg-zinc-800 p-6 rounded-xl shadow-md text-center">
+                                <img
+                                    src={`https://source.unsplash.com/80x80/?person,fitness,${num}`}
+                                    alt={`User ${num}`}
+                                    className="h-16 w-16 mx-auto rounded-full mb-4 object-cover"
+                                />
+                                <p className="text-sm">
+                                    {[
+                                        "Amazing equipment and vibe! The trainers are really motivating. I've never felt better.",
+                                        "Love the Zumba classes! It’s the perfect mix of fun and sweat.",
+                                        "Facilities are top-notch and super clean. Definitely recommend Iron Paradise!",
+                                        "A great environment to push your limits and stay consistent."
+                                    ][index]}
+                                </p>
+                            </div>
+                        ))}
                     </div>
-                </div>
-
-
-                {/* Contact Info */}
-                <div className="text-center text-sm mt-8 text-zinc-400">
-                    <p>For more information, contact us at:</p>
-                    <p className="text-white">{gym.contactNo}</p>
-                    <p className="text-white">{gym.address}</p>
-                </div>
-
-                {/* Back Button */}
-                <div className="text-center mt-10">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="px-6 py-2 bg-[#C8AD7F] text-black rounded hover:bg-[#e0c290] transition"
-                    >
-                        ← Back to Explore
-                    </button>
                 </div>
             </div>
         </div>
