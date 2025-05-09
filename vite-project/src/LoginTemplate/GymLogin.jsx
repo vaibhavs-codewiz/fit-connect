@@ -15,7 +15,7 @@ const GymLogin = () => {
         console.log("Gym login attempt:", data);
         try {
             console.log(data);
-            const response = await api.post("/Gym/gym/login", data); // POST with body
+            const response = await api.get(`/Gym/login/${data.email}/${data.password}`); // POST with body
 
             console.log("Gym login response:", response.data);
             if (response.data.responseCode === "00000") {
@@ -28,7 +28,7 @@ const GymLogin = () => {
             }
         } catch (error) {
             console.error("Login error:", error.message);
-            toast.error("failed login due to server error ❌",error)
+            toast.error("failed login due to server error ❌", error)
         }
     };
 
