@@ -1,6 +1,5 @@
-import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-
+// added comment
 const Explore = () => {
     const data = [
         { id: 1, name: "gymHolic" },
